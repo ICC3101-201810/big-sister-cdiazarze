@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
+
 
 namespace LabPOO
 {
@@ -16,7 +20,7 @@ namespace LabPOO
         {
             cart = new List<Product>();
             market = new List<Product>();
-            SupplyStore();
+        if (!LoadData()) SupplyStore();
             while (true)
             {
                 PrintHeader();
@@ -51,6 +55,7 @@ namespace LabPOO
                     }
                     else if (answer == "5")
                     {
+                        SaveData(cart, market);
                         Environment.Exit(1);
                     }
                 }
@@ -191,5 +196,47 @@ namespace LabPOO
                 response = Console.ReadKey(true);
             }
         }
+
+    private static void SaveData(List<Product> cart, List<Product> market)
+    {
+      // Creamos el Stream donde guardaremos la informacion
+      String fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cart.txt");
+      FileStream fs = new FileStream(fileName, FileMode.Create);
+      IFormatter formatter = new BinaryFormatter();
+      formatter.Serialize(fs, cart);
+      fs.Close();
+      fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "market.txt");
+      fs = new FileStream(fileName, FileMode.Create);
+      formatter.Serialize(fs, market);
+      fs.Close();
+
+
     }
+
+    private static Boolean LoadData()
+    {
+      //string fileName = Path.Combine(Directory.GetCurrentDirectory(), "Users.txt");
+      String fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cart.txt");
+      if (!File.Exists(fileName))
+      {
+        return false;
+      }
+      FileStream fs = new FileStream(fileName, FileMode.Open);
+      IFormatter formatter = new BinaryFormatter();
+      List<Product> cartser = formatter.Deserialize(fs) as List<Product>;
+      foreach (Product c in cartser)
+      {
+        cart.Add(c);
+      }
+      fs.Close();
+      fileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "market.txt");
+      fs = new FileStream(fileName, FileMode.Open);
+      List<Product> marketser = formatter.Deserialize(fs) as List<Product>;
+      foreach (Product m in marketser) market.Add(m);
+      fs.Close();
+      return true;
+    }
+
+
+  }
 }

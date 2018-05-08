@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace LabPOO
 {
-    class Product
+  [Serializable]
+  class Product
     {
         private string name;
         private int stock;
         private int price; //Price for one unit of the product
         private string unit;
+        public event EventHandler NotMatias;
 
-        public Product(string name, int price, int stock, string unit)
+
+    public Product(string name, int price, int stock, string unit)
         {
             this.name = name;
             this.stock = stock;
@@ -25,6 +28,7 @@ namespace LabPOO
         {
             if (stock > 0)
             {
+                
                 carrito.Add(this);
                 stock--;
                 return true;
