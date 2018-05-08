@@ -9,11 +9,13 @@ namespace LabPOO
   [Serializable]
   class Product
     {
+        public delegate void BigGrumpySister(object sender, EventArgs e);
+        public event BigGrumpySister NotMatias;
         private string name;
         private int stock;
         private int price; //Price for one unit of the product
         private string unit;
-        public event EventHandler NotMatias;
+
 
 
     public Product(string name, int price, int stock, string unit)
