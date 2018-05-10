@@ -11,16 +11,25 @@ using System.IO;
 
 namespace LabPOO
 {
+    
     class Program
-    {
+    { 
         public static List<Product> cart;
+        public static List<Product> list;
         public static List<Product> market;
 
-        static void Main(string[] args)
-        {
-            cart = new List<Product>();
-            market = new List<Product>();
-        if (!LoadData()) SupplyStore();
+
+
+    static void Main(string[] args)
+    {
+      cart = new List<Product>();
+      market = new List<Product>();
+      list = new List<Product>();
+      Generatelist();
+      if (!LoadData()){
+        SupplyStore();
+        Suscribe();
+      }
             while (true)
             {
                 PrintHeader();
@@ -97,7 +106,7 @@ namespace LabPOO
                     {
                         continue;
                     }
-                    AddToCart(market[answer]);
+                    AddToCart(market[answer], list);
                     break;
                 }
                 catch
@@ -134,12 +143,19 @@ namespace LabPOO
             Console.WriteLine("\t\t LIDER\n");
         }
 
-        public static bool AddToCart(Product product)
+        public static bool AddToCart(Product product, List<Product> list)
         {
-            return product.Agregar(cart);
+            return product.Agregar(cart, list);
         }
 
-        public static void SupplyStore()
+        public static void Suscribe()
+        {
+          foreach (Product p in market)
+            p.ProductAdded += p.Quitar;
+        }
+    
+
+    public static void SupplyStore()
         {
             market.Add(new Product("Leche Entera", 820, 89, "1L"));
             market.Add(new Product("Gomitas Flipy", 720, 12, "100g"));
@@ -164,6 +180,32 @@ namespace LabPOO
             market.Add(new Product("Tomates Pelados en lata", 700, 48, "540g"));
             market.Add(new Product("Queso Parmesano", 3790, 41, "200g"));
             market.Add(new Product("Bolsa de Zanahorias", 890, 74, "1un"));
+        }
+        public static void Generatelist()
+        {
+            list.Add(new Product("Leche Entera", 820, 1, "1L"));
+            list.Add(new Product("Gomitas Flipy", 720, 0, "100g"));
+            list.Add(new Product("Mantequilla", 850, 1, "125g"));
+            list.Add(new Product("Crema para hemorroides", 4990, 0, "300cc"));
+            list.Add(new Product("Pimienta", 430, 2, "15g"));
+            list.Add(new Product("Vino Sauvignon Blanc Reserva Botella", 4150, 1, "750cc"));
+            list.Add(new Product("Sal Lobos", 330, 2, "1kg"));
+            list.Add(new Product("Cuaderno Mi Pequeño Pony", 1290, 0, "1un"));
+            list.Add(new Product("Láminas de Lasaña", 1250, 12, "400g"));
+            list.Add(new Product("Tomate", 1290, 1, "1kg"));
+            list.Add(new Product("Harina", 890, 1, "1kg"));
+            list.Add(new Product("Audifonos Samsung", 5990, 0, "1un"));
+            list.Add(new Product("Pisco Alto del Carmen", 5990, 0, "1L"));
+            list.Add(new Product("Carne Molida", 4390, 1, "500g"));
+            list.Add(new Product("Aceite de Oliva", 1790, 1, "250g"));
+            list.Add(new Product("Sal parrillera", 840, 0, "750g"));
+            list.Add(new Product("Cable HDMI 1m", 3990, 0, "1un"));
+            list.Add(new Product("Queso Rallado Parmesano", 499, 2, "40g"));
+            list.Add(new Product("Vino Blanco Caja", 2790, 0, "2L"));
+            list.Add(new Product("Malla de Cebollas", 1090, 1, "1kg"));
+            list.Add(new Product("Tomates Pelados en lata", 700, 1, "540g"));
+            list.Add(new Product("Queso Parmesano", 3790, 0, "200g"));
+            list.Add(new Product("Bolsa de Zanahorias", 890, 1, "1un"));
         }
 
         public static void ShowRecipe()
@@ -236,6 +278,8 @@ namespace LabPOO
       fs.Close();
       return true;
     }
+
+
 
 
   }
